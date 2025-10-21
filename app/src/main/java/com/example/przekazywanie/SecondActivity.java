@@ -7,30 +7,50 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class SecondActivity extends AppCompatActivity {
     public TextView tekst;
     public TextView tekst2;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_second);
-        // W SecondActivity.java, w metodzie onCreate()
 
-// Pobranie intencji, która uruchomiła tę Aktywność
         Intent intent = getIntent();
         tekst = findViewById(R.id.textView);
         tekst2 = findViewById(R.id.textView2);
-// Odczytanie danych
-        String msg = intent.getStringExtra(MainActivity.EXTRA_ACTIVITY_MSG);
 
-        String wynik = intent.getStringExtra(MainActivity.EXTRA_ACTIVITY_MSG);
-        tekst.setText(msg);
+        if (intent.hasExtra(MainActivity.EXTRA_LICZBA_1) && intent.hasExtra(MainActivity.EXTRA_LICZBA_2)) {
+            String wiadomosc = intent.getStringExtra(MainActivity.EXTRA_WIADOMOSC);
+            double liczba1 = intent.getDoubleExtra(MainActivity.EXTRA_LICZBA_1, 0);
+            double liczba2 = intent.getDoubleExtra(MainActivity.EXTRA_LICZBA_2, 0);
+            double suma = liczba1 + liczba2;
 
+            String wynik = "Wynik dodawania: " + suma;
+
+            tekst.setText(wiadomosc);
+            tekst2.setText(wynik);
+        }
+        else if (intent.hasExtra(MainActivity.EXTRA_IMIE) && intent.hasExtra(MainActivity.EXTRA_WIEK)) {
+            String imie = intent.getStringExtra(MainActivity.EXTRA_IMIE);
+            int wiek = intent.getIntExtra(MainActivity.EXTRA_WIEK, 0);
+
+            String info = "Imię: " + imie + ", Wiek: " + wiek;
+            tekst.setText("Dane osobowe:");
+            tekst2.setText(info);
+        }
+        else if (intent.hasExtra(MainActivity.EXTRA_PREMIUM)) {
+            boolean premium = intent.getBooleanExtra(MainActivity.EXTRA_PREMIUM, false);
+
+            String tekstPremium = premium ?
+                    "Ustawienia premium: Włączone" :
+                    "Ustawienia premium: Wyłączone";
+
+            tekst.setText("Status konta:");
+            tekst2.setText(tekstPremium);
+        }
     }
 }
